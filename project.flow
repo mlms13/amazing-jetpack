@@ -1,0 +1,19 @@
+{
+  project: {
+    name: 'Amazing Jetpack Game',
+    version: '0.0.1',
+    author: 'The Michael',
+    app: {
+      name: 'amazing_jetpack',
+      package: 'what.is.this'
+    },
+    build: {
+      dependencies: {
+        luxe: '*'
+      }
+    },
+    files: {
+      assets: 'assets/'
+    }
+  }
+}
