@@ -61,6 +61,12 @@ class Main extends luxe.Game {
 
     Luxe.input.bind_key('right', Key.right);
     Luxe.input.bind_key('right', Key.key_d);
+
+    Luxe.input.bind_key('up', Key.up);
+    Luxe.input.bind_key('up', Key.key_w);
+
+    Luxe.input.bind_key('down', Key.down);
+    Luxe.input.bind_key('down', Key.key_s);
   }
 
   override function update(delta:Float) {
@@ -69,6 +75,10 @@ class Main extends luxe.Game {
       player.pos.x -= speed * delta;
     } else if (Luxe.input.inputdown('right')) {
       player.pos.x += speed * delta;
+    } else if (Luxe.input.inputdown('up')) {
+      player.pos.y -= speed * delta;
+    } else if (Luxe.input.inputdown('down')) {
+      player.pos.y += speed * delta;
     }
   }
 
