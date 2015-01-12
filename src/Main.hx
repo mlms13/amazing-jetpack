@@ -86,7 +86,7 @@ class Main extends luxe.Game {
       movement.y += speed * delta;
     }
 
-    if (movement.x > 0 || movement.y > 0) {
+    if (movement.x != 0 || movement.y != 0) {
       movement = checkForCollision(player.pos, movement);
       player.pos.x += movement.x;
       player.pos.y += movement.y;
