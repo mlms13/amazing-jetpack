@@ -73,51 +73,56 @@ class Main extends luxe.Game {
 
   override function update(delta:Float) {
     // Figure out our attempted keyboard movement, but ask our collision
-    // function to give us the real movement, based on map limits
+    // functions to give us the real movement, based on map limits
     var movement = new Vector(0, 0);
 
     if (Luxe.input.inputdown('left')) {
-      movement.x -= speed * delta;
+      player.pos.x = limitLeftCollision(player.pos.x - (speed * delta));
     } else if (Luxe.input.inputdown('right')) {
-      movement.x += speed * delta;
+      player.pos.x = limitRightCollision(player.pos.x + (speed * delta));
     } else if (Luxe.input.inputdown('up')) {
-      movement.y -= speed * delta;
+      player.pos.y = limitTopCollision(player.pos.y - (speed * delta));
     } else if (Luxe.input.inputdown('down')) {
-      movement.y += speed * delta;
+      player.pos.y = limitBottomCollision(player.pos.y + (speed * delta));
     }
-
-    if (movement.x != 0 || movement.y != 0) {
-      movement = checkForCollision(player.pos, movement);
-      player.pos.x += movement.x;
-      player.pos.y += movement.y;
-    }
-
   }
 
-  function checkForCollision(current : Vector, movement : Vector) : Vector {
-    // figure out of the tile at the target position is a block
-    // and completely disable movement
-    var target = new Vector(current.x + movement.x, current.y + movement.y);
-
-    // when moving down or to the right, check the next block
-    if (movement.x > 0 || movement.y > 0) {
-      target.x = Math.ceil(target.x / tileWidth);
-      target.y = Math.ceil(target.y / tileWidth);
-    } else if (movement.x < 0 || movement.y < 0) {
-      target.x = Math.floor(target.x / tileWidth);
-      target.y = Math.floor(target.y / tileWidth);
+  function limitBottomCollision(targetY : Float) : Float {
+    // check both bottom corners for collisions
+    if (mapTileIsSolid(player.pos.x, targetY + (tileWidth - 1)) ||
+        mapTileIsSolid(player.pos.x + (tileWidth - 1), targetY + (tileWidth - 1))) {
+      targetY = Math.floor(targetY / tileWidth) * tileWidth;
+      trace("COLLISION DOWN: returning a new target y coord of " + targetY);
     }
-
-    if (mapTileIsSolid(Math.round(target.y), Math.round(target.x))) {
-      movement.x = 0;
-      movement.y = 0;
-    }
-
-    return movement;
+    return targetY;
   }
 
-  function mapTileIsSolid(row, col) : Bool {
-    return map[row][col] > 0;
+  function limitTopCollision(targetY : Float) : Float {
+    if (mapTileIsSolid(player.pos.x, targetY) ||
+        mapTileIsSolid(player.pos.x + (tileWidth - 1), targetY)) {
+      targetY = Math.ceil(targetY / tileWidth) * tileWidth;
+      trace("COLLISION UP: returning a new target y coord of " + targetY);
+    }
+    return targetY;
   }
 
+  function limitLeftCollision(targetX : Float) : Float {
+    if (mapTileIsSolid(targetX, player.pos.y) ||
+        mapTileIsSolid(targetX, player.pos.y + (tileWidth - 1))) {
+      targetX = Math.ceil(targetX / tileWidth) * tileWidth;
+    }
+    return targetX;
+  }
+
+  function limitRightCollision(targetX : Float) : Float {
+    if (mapTileIsSolid(targetX + (tileWidth - 1), player.pos.y) ||
+        mapTileIsSolid(targetX + (tileWidth - 1), player.pos.y + (tileWidth - 1))) {
+      targetX = Math.floor(targetX / tileWidth) * tileWidth;
+    }
+    return targetX;
+  }
+
+  function mapTileIsSolid(x : Float, y : Float) : Bool {
+    return map[Math.floor(y / tileWidth)][Math.floor(x / tileWidth)] > 0;
+  }
 }
