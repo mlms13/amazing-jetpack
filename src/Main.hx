@@ -7,7 +7,8 @@ class Main extends luxe.Game {
   var player : Sprite;
   var map : Array<Array<Int>>;
   var speed : Float = 128;
-  var tileWidth = 32;
+  var tileSize = 32;
+  var playerSize = 24;
 
   override function ready() {
     map = [
@@ -33,9 +34,9 @@ class Main extends luxe.Game {
     player = new Sprite({
       centered: false,
       name: 'the player',
-      pos: new Vector(0, 10 * tileWidth),
+      pos: new Vector(0, 10 * tileSize + (tileSize - playerSize)),
       color: new Color().rgb(0xbada55),
-      size: new Vector(tileWidth, tileWidth),
+      size: new Vector(playerSize, playerSize),
       depth: 2
     });
 
@@ -48,9 +49,9 @@ class Main extends luxe.Game {
       for (cell in 0...map[row].length) {
         new Sprite({
           centered: false,
-          pos: new Vector(cell * tileWidth, row * tileWidth),
+          pos: new Vector(cell * tileSize, row * tileSize),
           color: (map[row][cell] == 1) ? new Color().rgb(0x0) : new Color().rgb(0xffffff),
-          size: new Vector(tileWidth, tileWidth)
+          size: new Vector(tileSize, tileSize)
         });
       }
     }
@@ -89,40 +90,38 @@ class Main extends luxe.Game {
 
   function limitBottomCollision(targetY : Float) : Float {
     // check both bottom corners for collisions
-    if (mapTileIsSolid(player.pos.x, targetY + (tileWidth - 1)) ||
-        mapTileIsSolid(player.pos.x + (tileWidth - 1), targetY + (tileWidth - 1))) {
-      targetY = Math.floor(targetY / tileWidth) * tileWidth;
-      trace("COLLISION DOWN: returning a new target y coord of " + targetY);
+    if (mapTileIsSolid(player.pos.x, targetY + (playerSize - 1)) ||
+        mapTileIsSolid(player.pos.x + (playerSize - 1), targetY + (playerSize - 1))) {
+      targetY = Math.floor(targetY / tileSize) * tileSize + (tileSize - playerSize);
     }
     return targetY;
   }
 
   function limitTopCollision(targetY : Float) : Float {
     if (mapTileIsSolid(player.pos.x, targetY) ||
-        mapTileIsSolid(player.pos.x + (tileWidth - 1), targetY)) {
-      targetY = Math.ceil(targetY / tileWidth) * tileWidth;
-      trace("COLLISION UP: returning a new target y coord of " + targetY);
+        mapTileIsSolid(player.pos.x + (playerSize - 1), targetY)) {
+      targetY = Math.ceil(targetY / tileSize) * tileSize;
     }
     return targetY;
   }
 
   function limitLeftCollision(targetX : Float) : Float {
     if (mapTileIsSolid(targetX, player.pos.y) ||
-        mapTileIsSolid(targetX, player.pos.y + (tileWidth - 1))) {
-      targetX = Math.ceil(targetX / tileWidth) * tileWidth;
+        mapTileIsSolid(targetX, player.pos.y + (playerSize - 1))) {
+      targetX = Math.ceil(targetX / tileSize) * tileSize;
     }
     return targetX;
   }
 
   function limitRightCollision(targetX : Float) : Float {
-    if (mapTileIsSolid(targetX + (tileWidth - 1), player.pos.y) ||
-        mapTileIsSolid(targetX + (tileWidth - 1), player.pos.y + (tileWidth - 1))) {
-      targetX = Math.floor(targetX / tileWidth) * tileWidth;
+    if (mapTileIsSolid(targetX + (playerSize - 1), player.pos.y) ||
+        mapTileIsSolid(targetX + (playerSize - 1), player.pos.y + (playerSize - 1))) {
+      targetX = Math.floor(targetX / tileSize) * tileSize + (tileSize - playerSize);
     }
     return targetX;
   }
 
   function mapTileIsSolid(x : Float, y : Float) : Bool {
-    return map[Math.floor(y / tileWidth)][Math.floor(x / tileWidth)] > 0;
+    return map[Math.floor(y / tileSize)][Math.floor(x / tileSize)] > 0;
   }
 }
