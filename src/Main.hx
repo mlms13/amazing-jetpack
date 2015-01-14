@@ -55,11 +55,17 @@ class Main extends luxe.Game {
 
     if (Luxe.input.inputdown('left')) {
       player.pos.x = limitLeftCollision(player.pos.x - (speed * delta));
-    } else if (Luxe.input.inputdown('right')) {
+    }
+
+    if (Luxe.input.inputdown('right')) {
       player.pos.x = limitRightCollision(player.pos.x + (speed * delta));
-    } else if (Luxe.input.inputdown('up')) {
+    }
+
+    if (Luxe.input.inputdown('up')) {
       player.pos.y = limitTopCollision(player.pos.y - (speed * delta));
-    } else if (Luxe.input.inputdown('down')) {
+    }
+
+    if (Luxe.input.inputdown('down')) {
       player.pos.y = limitBottomCollision(player.pos.y + (speed * delta));
     }
   }
