@@ -10,8 +10,14 @@ class Main extends luxe.Game {
   var tileSize = 32;
   var playerSize = 24;
 
+  override function config(config:luxe.AppConfig) {
+    config.window.width = tileSize * 16;
+    config.window.height = tileSize * 16;
+    return config;
+  }
+
   override function ready() {
-    world = new World();
+    world = new World(tileSize);
 
     // do something here when assets have finished loading...
     player = new Sprite({
