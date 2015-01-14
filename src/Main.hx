@@ -4,31 +4,14 @@ import luxe.Color;
 import luxe.Vector;
 
 class Main extends luxe.Game {
+  public var world : World;
   var player : Sprite;
-  var map : Array<Array<Int>>;
   var speed : Float = 128;
   var tileSize = 32;
   var playerSize = 24;
 
   override function ready() {
-    map = [
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-      [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-    ];
+    world = new World();
 
     // do something here when assets have finished loading...
     player = new Sprite({
@@ -40,21 +23,8 @@ class Main extends luxe.Game {
       depth: 2
     });
 
-    drawMap();
+    world.draw();
     connectInput();
-  }
-
-  function drawMap() {
-    for (row in 0...map.length) {
-      for (cell in 0...map[row].length) {
-        new Sprite({
-          centered: false,
-          pos: new Vector(cell * tileSize, row * tileSize),
-          color: (map[row][cell] == 1) ? new Color().rgb(0x0) : new Color().rgb(0xffffff),
-          size: new Vector(tileSize, tileSize)
-        });
-      }
-    }
   }
 
   function connectInput() {
@@ -122,6 +92,6 @@ class Main extends luxe.Game {
   }
 
   function mapTileIsSolid(x : Float, y : Float) : Bool {
-    return map[Math.floor(y / tileSize)][Math.floor(x / tileSize)] > 0;
+    return world.getValueAtTile(x, y) > 0;
   }
 }
