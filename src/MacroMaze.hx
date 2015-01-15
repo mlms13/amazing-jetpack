@@ -22,7 +22,7 @@ class MacroMaze {
       return "[" + chars.map(function(line) {
         return "['" + line.map(function(char) return switch char {
           case ".": 0;
-          case "X": 1;
+          case "x": 1;
           case c: throw 'damnit I knew you would use the invalid char "$c"';
         }).join("', '") + "']";
       }).join(", ") + "]";
