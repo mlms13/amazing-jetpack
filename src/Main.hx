@@ -11,8 +11,8 @@ class Main extends luxe.Game {
   var playerSize = 24;
 
   override function config(config:luxe.AppConfig) {
-    config.window.width = tileSize * 16;
-    config.window.height = tileSize * 16;
+    config.window.width = tileSize * 32;
+    config.window.height = tileSize * 24;
     return config;
   }
 
@@ -23,7 +23,7 @@ class Main extends luxe.Game {
     player = new Sprite({
       centered: false,
       name: 'the player',
-      pos: new Vector(0, 10 * tileSize + (tileSize - playerSize)),
+      pos: new Vector(0, 18 * tileSize + (tileSize - playerSize)),
       color: new Color().rgb(0xbada55),
       size: new Vector(playerSize, playerSize),
       depth: 2
