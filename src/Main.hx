@@ -1,11 +1,10 @@
 import luxe.Input;
 import luxe.Sprite;
-import luxe.Color;
 import luxe.Vector;
 
 class Main extends luxe.Game {
   public var world : World;
-  var player : Sprite;
+  var player : Player;
   var speed : Float = 128;
   var tileSize = 32;
   var playerSize = 24;
@@ -18,16 +17,7 @@ class Main extends luxe.Game {
 
   override function ready() {
     world = new World(tileSize);
-
-    // do something here when assets have finished loading...
-    player = new Sprite({
-      centered: false,
-      name: 'the player',
-      pos: new Vector(0, 18 * tileSize + (tileSize - playerSize)),
-      color: new Color().rgb(0xbada55),
-      size: new Vector(playerSize, playerSize),
-      depth: 2
-    });
+    player = new Player(new Vector(0, 18 * tileSize + (tileSize - playerSize)), playerSize);
 
     world.draw();
     connectInput();
@@ -54,50 +44,50 @@ class Main extends luxe.Game {
     var movement = new Vector(0, 0);
 
     if (Luxe.input.inputdown('left')) {
-      player.pos.x = limitLeftCollision(player.pos.x - (speed * delta));
+      player.rendering.pos.x = limitLeftCollision(player.rendering.pos.x - (speed * delta));
     }
 
     if (Luxe.input.inputdown('right')) {
-      player.pos.x = limitRightCollision(player.pos.x + (speed * delta));
+      player.rendering.pos.x = limitRightCollision(player.rendering.pos.x + (speed * delta));
     }
 
     if (Luxe.input.inputdown('up')) {
-      player.pos.y = limitTopCollision(player.pos.y - (speed * delta));
+      player.rendering.pos.y = limitTopCollision(player.rendering.pos.y - (speed * delta));
     }
 
     if (Luxe.input.inputdown('down')) {
-      player.pos.y = limitBottomCollision(player.pos.y + (speed * delta));
+      player.rendering.pos.y = limitBottomCollision(player.rendering.pos.y + (speed * delta));
     }
   }
 
   function limitBottomCollision(targetY : Float) : Float {
     // check both bottom corners for collisions
-    if (mapTileIsSolid(player.pos.x, targetY + (playerSize - 1)) ||
-        mapTileIsSolid(player.pos.x + (playerSize - 1), targetY + (playerSize - 1))) {
+    if (mapTileIsSolid(player.rendering.pos.x, targetY + (playerSize - 1)) ||
+        mapTileIsSolid(player.rendering.pos.x + (playerSize - 1), targetY + (playerSize - 1))) {
       targetY = Math.floor(targetY / tileSize) * tileSize + (tileSize - playerSize);
     }
     return targetY;
   }
 
   function limitTopCollision(targetY : Float) : Float {
-    if (mapTileIsSolid(player.pos.x, targetY) ||
-        mapTileIsSolid(player.pos.x + (playerSize - 1), targetY)) {
+    if (mapTileIsSolid(player.rendering.pos.x, targetY) ||
+        mapTileIsSolid(player.rendering.pos.x + (playerSize - 1), targetY)) {
       targetY = Math.ceil(targetY / tileSize) * tileSize;
     }
     return targetY;
   }
 
   function limitLeftCollision(targetX : Float) : Float {
-    if (mapTileIsSolid(targetX, player.pos.y) ||
-        mapTileIsSolid(targetX, player.pos.y + (playerSize - 1))) {
+    if (mapTileIsSolid(targetX, player.rendering.pos.y) ||
+        mapTileIsSolid(targetX, player.rendering.pos.y + (playerSize - 1))) {
       targetX = Math.ceil(targetX / tileSize) * tileSize;
     }
     return targetX;
   }
 
   function limitRightCollision(targetX : Float) : Float {
-    if (mapTileIsSolid(targetX + (playerSize - 1), player.pos.y) ||
-        mapTileIsSolid(targetX + (playerSize - 1), player.pos.y + (playerSize - 1))) {
+    if (mapTileIsSolid(targetX + (playerSize - 1), player.rendering.pos.y) ||
+        mapTileIsSolid(targetX + (playerSize - 1), player.rendering.pos.y + (playerSize - 1))) {
       targetX = Math.floor(targetX / tileSize) * tileSize + (tileSize - playerSize);
     }
     return targetX;
