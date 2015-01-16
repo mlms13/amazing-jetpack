@@ -104,6 +104,9 @@ class Main extends luxe.Game {
   }
 
   function mapTileIsSolid(x : Float, y : Float) : Bool {
-    return world.getValueAtTile(x, y) != "0";
+    return switch world.getValueAtTile(x, y) {
+      case MazeCell.wall: true;
+      case _: false;
+    };
   }
 }
