@@ -5,6 +5,7 @@ import luxe.Vector;
 class Main extends luxe.Game {
   public var world : World;
   var player : Player;
+  var acceleration : Float;
   var tileSize = 32;
   var playerSize = 24;
 
@@ -15,6 +16,7 @@ class Main extends luxe.Game {
   }
 
   override function ready() {
+    acceleration = 0.9;
     world = new World(tileSize);
     player = new Player(new Vector(0, 18 * tileSize + (tileSize - playerSize)), playerSize);
 
@@ -30,30 +32,34 @@ class Main extends luxe.Game {
     Luxe.input.bind_key('right', Key.right);
     Luxe.input.bind_key('right', Key.key_d);
 
+    Luxe.input.bind_key('jump', Key.space);
+
     Luxe.input.bind_key('up', Key.up);
     Luxe.input.bind_key('up', Key.key_w);
-
-    Luxe.input.bind_key('down', Key.down);
-    Luxe.input.bind_key('down', Key.key_s);
   }
 
   override function update(delta : Float) {
-    // Figure out our attempted keyboard movement, but ask our collision
-    // functions to give us the real movement, based on map limits
-    if (Luxe.input.inputdown('left')) {
-      player.moveX(-1 * player.maxSpeed * delta, world);
+    // start by attempting to apply gravity
+    player.velocity.y = Math.min(player.velocity.y + 0.2, 8);
+
+    // however, if the player is on the ground, allow them to jump
+    if (Luxe.input.inputdown('jump') && player.isOnGround) {
+      player.velocity.y = -player.jumpSpeed * delta;
     }
 
-    if (Luxe.input.inputdown('right')) {
-      player.moveX(player.maxSpeed * delta, world);
-    }
-
+    // and even if they aren't on the ground, they can always use the jetpack
+    // TODO: ...if it has fuel
     if (Luxe.input.inputdown('up')) {
-      player.moveY(-1 * player.maxSpeed * delta, world);
+      player.velocity.y -= (player.maxSpeed / 4) * delta;
+      player.velocity.y = Math.max(player.velocity.y, -4);
     }
 
-    if (Luxe.input.inputdown('down')) {
-      player.moveY(player.maxSpeed * delta, world);
+    if (Luxe.input.inputdown('left')) {
+      player.velocity.x = -player.maxSpeed * delta;
     }
+    if (Luxe.input.inputdown('right')) {
+      player.velocity.x = player.maxSpeed * delta;
+    }
+    player.move(world);
   }
 }
