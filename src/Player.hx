@@ -61,16 +61,16 @@ class Player {
   }
 
   function avoidRightCollision(targetX : Float, world : World) : Float {
-    if (mapTileIsSolid(world, targetX + (size -1), rendering.pos.y) ||
-        mapTileIsSolid(world, targetX + (size - 1), rendering.pos.y + (size - 1))) {
+    if (mapTileIsSolid(world, targetX + size, rendering.pos.y) ||
+        mapTileIsSolid(world, targetX + size, rendering.pos.y + (size - 1))) {
       targetX = Math.floor(targetX / world.tileSize) * world.tileSize + (world.tileSize - size);
     }
     return targetX;
   }
 
   function avoidBottomCollision(targetY : Float, world : World) : Float {
-    if (mapTileIsSolid(world, rendering.pos.x, targetY + (size - 1)) ||
-        mapTileIsSolid(world, rendering.pos.x + (size - 1), targetY + (size - 1))) {
+    if (mapTileIsSolid(world, rendering.pos.x, targetY + size) ||
+        mapTileIsSolid(world, rendering.pos.x + (size - 1), targetY + size)) {
       velocity.y = 0;
       isOnGround = true;
       targetY = Math.floor(targetY / world.tileSize) * world.tileSize + (world.tileSize - size);
