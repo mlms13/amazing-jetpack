@@ -20,8 +20,20 @@ class Main extends luxe.Game {
     world = new World(tileSize);
     player = new Player(new Vector(0, 18 * tileSize + (tileSize - playerSize)), playerSize);
 
+    Luxe.camera.zoom = 2;
+
     world.draw();
     connectInput();
+  }
+
+  override function onmousewheel( e:MouseEvent ) {
+    if(e.y < 0) {
+      // wheel_up
+      Luxe.camera.zoom += 0.1;
+    } else if(e.y > 0 && Luxe.camera.zoom > 1) {
+      // wheel_down
+      Luxe.camera.zoom -= 0.1;
+    }
   }
 
   function connectInput() {
@@ -61,5 +73,6 @@ class Main extends luxe.Game {
       player.velocity.x = player.maxSpeed * delta;
     }
     player.move(world);
+    Luxe.camera.center = new Vector(player.rendering.pos.x, player.rendering.pos.y);
   }
 }
