@@ -52,7 +52,14 @@ class World {
       });
   }
 
-   public function getValueAtTile(x : Float, y : Float) : MazeCell {
-     return map[Math.floor(y / tileSize)][Math.floor(x / tileSize)];
-   }
+  public function getValueAtTile(x : Float, y : Float) : MazeCell {
+    var row = Math.floor(y / tileSize);
+    var col = Math.floor(x / tileSize);
+
+    // anything outside of the map is considered a wall
+    if (row < 0 || row >= rows || col < 0 || col >= cols) {
+      return MazeCell.wall;
+    }
+    return map[row][col];
+  }
 }
