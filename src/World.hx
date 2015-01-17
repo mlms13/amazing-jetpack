@@ -43,7 +43,13 @@ class World {
         size: new Vector(tileSize, tileSize)
       });
     case powerUp(value):
-      // do something
+      // do something more interesting
+      new Sprite({
+        centered: false,
+        pos: new Vector(col * tileSize, row * tileSize),
+        color: new Color().rgb(0xffffff),
+        size: new Vector(tileSize, tileSize)
+      });
   }
 
    public function getValueAtTile(x : Float, y : Float) : MazeCell {
