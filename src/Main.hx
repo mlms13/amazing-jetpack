@@ -27,10 +27,10 @@ class Main extends luxe.Game {
   }
 
   override function onmousewheel( e:MouseEvent ) {
-    if(e.y < 0) {
+    if(e.y < 0 && Luxe.camera.zoom < 1) {
       // wheel_up
       Luxe.camera.zoom += 0.1;
-    } else if(e.y > 0 && Luxe.camera.zoom > 1) {
+    } else if(e.y > 0) {
       // wheel_down
       Luxe.camera.zoom -= 0.1;
     }
