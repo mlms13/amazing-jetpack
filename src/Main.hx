@@ -6,21 +6,21 @@ class Main extends luxe.Game {
   public var world : World;
   var player : Player;
   var acceleration : Float;
-  var tileSize = 32;
-  var playerSize = 24;
+  var tileSize = 128;
+  var playerSize = 48;
 
   override function config(config:luxe.AppConfig) {
-    config.window.width = tileSize * 32;
-    config.window.height = tileSize * 24;
+    config.window.width = 800;
+    config.window.height = 600;
     return config;
   }
 
   override function ready() {
     acceleration = 0.9;
     world = new World(tileSize);
-    player = new Player(new Vector(0, 18 * tileSize + (tileSize - playerSize)), playerSize);
+    player = new Player(new Vector(0, 18 * tileSize + (tileSize - playerSize)), playerSize, world);
 
-    Luxe.camera.zoom = 2;
+    Luxe.camera.zoom = 1;
 
     world.draw();
     connectInput();
@@ -52,7 +52,7 @@ class Main extends luxe.Game {
 
   override function update(delta : Float) {
     // start by attempting to apply gravity
-    player.velocity.y = Math.min(player.velocity.y + 0.2, 8);
+    player.velocity.y = Math.min(player.velocity.y + 0.25, 12);
 
     // however, if the player is on the ground, allow them to jump
     if (Luxe.input.inputdown('jump') && player.isOnGround) {
@@ -63,7 +63,7 @@ class Main extends luxe.Game {
     // TODO: ...if it has fuel
     if (Luxe.input.inputdown('up')) {
       player.velocity.y -= (player.maxSpeed / 4) * delta;
-      player.velocity.y = Math.max(player.velocity.y, -4);
+      player.velocity.y = Math.max(player.velocity.y, -6);
     }
 
     if (Luxe.input.inputdown('left')) {
@@ -72,7 +72,7 @@ class Main extends luxe.Game {
     if (Luxe.input.inputdown('right')) {
       player.velocity.x = player.maxSpeed * delta;
     }
-    player.move(world);
+    player.move();
     Luxe.camera.center = new Vector(player.rendering.pos.x, player.rendering.pos.y);
   }
 }
