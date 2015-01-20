@@ -1,6 +1,9 @@
 import luxe.Input;
 import luxe.Sprite;
 import luxe.Vector;
+import luxe.Color;
+import luxe.Parcel;
+import luxe.ParcelProgress;
 
 class Main extends luxe.Game {
   public var world : World;
@@ -17,11 +20,23 @@ class Main extends luxe.Game {
 
   override function ready() {
     acceleration = 0.9;
+
+    var assets = Luxe.loadJSON('assets/parcel.json');
+    var preload = new Parcel();
+    preload.from_json(assets.json);
+
+    new ParcelProgress({
+      parcel: preload,
+      background: new Color(1, 1, 1, 0.85),
+      oncomplete: onAssetsLoaded
+    });
+
+    preload.load();
+  }
+
+  function onAssetsLoaded(_) {
     world = new World(tileSize);
     player = new Player(new Vector(0, 18 * tileSize + (tileSize - playerSize)), playerSize, world);
-
-    Luxe.camera.zoom = 1;
-
     world.draw();
     connectInput();
   }
@@ -51,6 +66,9 @@ class Main extends luxe.Game {
   }
 
   override function update(delta : Float) {
+    if (player == null) {
+        return;
+    }
     // start by attempting to apply gravity
     player.velocity.y = Math.min(player.velocity.y + 0.25, 12);
 
@@ -74,5 +92,7 @@ class Main extends luxe.Game {
     }
     player.move();
     Luxe.camera.center = new Vector(player.rendering.pos.x, player.rendering.pos.y);
+    world.background.pos.x = Luxe.camera.pos.x - player.rendering.pos.x / 4;
+    world.background.pos.y = Luxe.camera.pos.y - 150 - player.rendering.pos.y / 32;
   }
 }

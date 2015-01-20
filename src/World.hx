@@ -2,9 +2,11 @@ import luxe.Sprite;
 import luxe.Color;
 import luxe.Vector;
 import MacroMaze;
+import phoenix.Texture;
 
 class World {
   public var map : Array<Array<MazeCell>>;
+  public var background : Sprite;
   public var rows : Int;
   public var cols : Int;
   public var tileSize : Int;
@@ -16,6 +18,17 @@ class World {
     this.tileSize = tileSize;
     this.rows = map.length;
     this.cols = map[0].length;
+
+    var bgImage = Luxe.loadTexture('assets/background.png');
+    bgImage.filter = FilterType.nearest;
+    var height = Luxe.screen.h;
+    var width = (height / bgImage.height) * bgImage.width;
+    background = new Sprite({
+      name: 'background',
+      texture: bgImage,
+      size: new Vector(width * 2, height * 2),
+      centered: false
+    });
   }
 
   public function draw() {
@@ -29,27 +42,28 @@ class World {
 
   function drawCell(cell : MazeCell, row : Int, col : Int) switch cell {
     case open:
-      new Sprite({
-        centered: false,
-        pos: new Vector(col * tileSize, row * tileSize),
-        color: new Color().rgb(0xffffff),
-        size: new Vector(tileSize, tileSize)
-      });
+      // new Sprite({
+      //   centered: false,
+      //   pos: new Vector(col * tileSize, row * tileSize),
+      //   color: new Color(0, 0, 0, 0),
+      //   size: new Vector(tileSize, tileSize)
+      // });
     case wall:
       new Sprite({
         centered: false,
         pos: new Vector(col * tileSize, row * tileSize),
-        color: new Color().rgb(0x0),
-        size: new Vector(tileSize, tileSize)
+        color: new Color(255, 255, 255, 0.9),
+        size: new Vector(tileSize, tileSize),
+        depth: 1
       });
     case powerUp(value):
       // do something more interesting
-      new Sprite({
-        centered: false,
-        pos: new Vector(col * tileSize, row * tileSize),
-        color: new Color().rgb(0xffffff),
-        size: new Vector(tileSize, tileSize)
-      });
+      // new Sprite({
+      //   centered: false,
+      //   pos: new Vector(col * tileSize, row * tileSize),
+      //   color: new Color().rgb(0xffffff),
+      //   size: new Vector(tileSize, tileSize)
+      // });
   }
 
   public function getValueAtTile(x : Float, y : Float) : MazeCell {
