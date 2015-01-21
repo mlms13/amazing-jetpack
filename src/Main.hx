@@ -97,8 +97,7 @@ class Main extends luxe.Game {
     }
     player.move();
     positionCamera();
-    world.background.pos.x = Luxe.camera.pos.x - player.rendering.pos.x / 4;
-    world.background.pos.y = Luxe.camera.pos.y - 150 - player.rendering.pos.y / 32;
+    positionBackground();
   }
 
   function positionCamera() {
@@ -145,5 +144,18 @@ class Main extends luxe.Game {
 
     // reset flags
     zoomIncrease = 0;
+  }
+
+  function positionBackground() {
+    // track how far the camera has moved as a percent of how far it could move
+    var mapPxWidth = world.cols * tileSize,
+        mapPxHeight = world.rows * tileSize,
+        cameraRangeX = mapPxWidth - Luxe.screen.w,
+        cameraRangeY = mapPxHeight - Luxe.screen.h,
+        bgRangeX = mapPxWidth - world.background.size.x,
+        bgRangeY = mapPxHeight - world.background.size.y;
+
+    world.background.pos.x = (Luxe.camera.pos.x / cameraRangeX) * bgRangeX;
+    world.background.pos.y = (Luxe.camera.pos.y / cameraRangeY) * bgRangeY;
   }
 }

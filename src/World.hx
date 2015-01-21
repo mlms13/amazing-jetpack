@@ -26,7 +26,7 @@ class World {
     background = new Sprite({
       name: 'background',
       texture: bgImage,
-      size: new Vector(width * 2, height * 2),
+      size: new Vector(width * 1.5, height * 1.5),
       centered: false
     });
   }
