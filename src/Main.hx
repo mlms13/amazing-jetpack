@@ -12,6 +12,9 @@ class Main extends luxe.Game {
   var tileSize = 128;
   var playerSize = 48;
 
+  // camera flags
+  var zoomIncrease : Float;
+
   override function config(config:luxe.AppConfig) {
     config.window.width = 800;
     config.window.height = 600;
@@ -42,12 +45,14 @@ class Main extends luxe.Game {
   }
 
   override function onmousewheel( e:MouseEvent ) {
+    // instead of handling camera directly, we just set a flag.
+    // the actual updating + limiting will be handled in positionCamera
     if(e.y < 0 && Luxe.camera.zoom < 1) {
       // wheel_up
-      Luxe.camera.zoom += 0.1;
+      zoomIncrease = 0.1;
     } else if(e.y > 0) {
       // wheel_down
-      Luxe.camera.zoom -= 0.1;
+      zoomIncrease = -0.1;
     }
   }
 
@@ -97,24 +102,48 @@ class Main extends luxe.Game {
   }
 
   function positionCamera() {
-    var playerX = player.rendering.pos.x,
-        playerY = player.rendering.pos.y,
-        // camera x is centered on the player
-        cameraX = playerX + (playerSize / 2) - (Luxe.screen.w / 2),
-        // camera y is centered on the player
-        cameraY = playerY + (playerSize / 2) - (Luxe.screen.h / 2);
+    // handle camera zoom
+    var newTargetZoom = Luxe.camera.zoom + zoomIncrease,
+        // calculate padding between map edge and camera edge when zoom is applied
+        paddingX = (Luxe.screen.w / newTargetZoom) / 2 - Luxe.screen.w / 2,
+        paddingY = (Luxe.screen.h / newTargetZoom) / 2 - Luxe.screen.h / 2,
+        leftEdge = paddingX,
+        rightEdge = (world.cols * world.tileSize) * newTargetZoom + paddingX,
+        topEdge = paddingY,
+        bottomEdge = (world.rows * world.tileSize) * newTargetZoom + paddingY;
 
-    // camera x has to be at least 0 (not beyond the left edge of the map)
-    cameraX = Math.max(cameraX, 0);
-    // left edge of the camera can't be beyond the left edge of the map
-    cameraX = Math.min(cameraX, (world.cols * world.tileSize) - Luxe.screen.w);
+    if (zoomIncrease != 0 &&
+        rightEdge - leftEdge > Luxe.screen.w &&
+        bottomEdge - topEdge > Luxe.screen.h) {
+      Luxe.camera.zoom += zoomIncrease;
+    } else {
+      // this is super messy and there has to be a better way
+      // but it's late and i'm tired, so...
+      // if we don't zoom, set the edges to their pre-zoom values
+      paddingX = (Luxe.screen.w / Luxe.camera.zoom) / 2 - Luxe.screen.w / 2;
+      paddingY = (Luxe.screen.h / Luxe.camera.zoom) / 2 - Luxe.screen.h / 2;
+      leftEdge = paddingX;
+      rightEdge = world.cols * world.tileSize - paddingX;
+      topEdge = paddingY;
+      bottomEdge = world.rows * world.tileSize - paddingY;
+    }
 
-    // top of camera can't be less than 0
-    cameraY = Math.max(cameraY, 0);
-    // bottom of camera can't be below the map
-    cameraY = Math.min(cameraY, (world.rows * world.tileSize) - Luxe.screen.h);
+    // handle camera position, by default x and y are centered on the player
+    var cameraX = player.rendering.pos.x + (playerSize / 2) - (Luxe.screen.w / 2),
+        cameraY = player.rendering.pos.y + (playerSize / 2) - (Luxe.screen.h / 2);
 
+    // Camera must be bound to the four edges
+    cameraX = Math.max(cameraX, leftEdge);
+    cameraX = Math.min(cameraX, rightEdge - Luxe.screen.w);
+
+    cameraY = Math.max(cameraY, topEdge);
+    cameraY = Math.min(cameraY, bottomEdge - Luxe.screen.h);
+
+    // change the camera position
     Luxe.camera.pos.x = cameraX;
     Luxe.camera.pos.y = cameraY;
+
+    // reset flags
+    zoomIncrease = 0;
   }
 }
