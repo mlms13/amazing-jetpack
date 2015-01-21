@@ -91,8 +91,30 @@ class Main extends luxe.Game {
       player.velocity.x = player.maxSpeed * delta;
     }
     player.move();
-    Luxe.camera.center = new Vector(player.rendering.pos.x, player.rendering.pos.y);
+    positionCamera();
     world.background.pos.x = Luxe.camera.pos.x - player.rendering.pos.x / 4;
     world.background.pos.y = Luxe.camera.pos.y - 150 - player.rendering.pos.y / 32;
+  }
+
+  function positionCamera() {
+    var playerX = player.rendering.pos.x,
+        playerY = player.rendering.pos.y,
+        // camera x is centered on the player
+        cameraX = playerX + (playerSize / 2) - (Luxe.screen.w / 2),
+        // camera y is centered on the player
+        cameraY = playerY + (playerSize / 2) - (Luxe.screen.h / 2);
+
+    // camera x has to be at least 0 (not beyond the left edge of the map)
+    cameraX = Math.max(cameraX, 0);
+    // left edge of the camera can't be beyond the left edge of the map
+    cameraX = Math.min(cameraX, (world.cols * world.tileSize) - Luxe.screen.w);
+
+    // top of camera can't be less than 0
+    cameraY = Math.max(cameraY, 0);
+    // bottom of camera can't be below the map
+    cameraY = Math.min(cameraY, (world.rows * world.tileSize) - Luxe.screen.h);
+
+    Luxe.camera.pos.x = cameraX;
+    Luxe.camera.pos.y = cameraY;
   }
 }
