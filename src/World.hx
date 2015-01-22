@@ -1,8 +1,9 @@
 import luxe.Sprite;
 import luxe.Color;
 import luxe.Vector;
-import MacroMaze;
 import phoenix.Texture;
+import luxe.tilemaps.Tilemap;
+import MacroMaze;
 
 class World {
   public var map : Array<Array<MazeCell>>;
@@ -11,10 +12,14 @@ class World {
   public var cols : Int;
   public var tileSize : Int;
 
+  var tileGrid : Array<Array<Int>>;
+  var tiles : Tilemap;
+
   public function new(?mapPath : String, ?tileSize = 32) {
     // eventually a map path won't be optional, and we'll read
     // a json file here to create the map. for now...
     this.map = MacroMaze.load("src/maps/1.worldmap");
+    tileGrid = [];
     this.tileSize = tileSize;
     this.rows = map.length;
     this.cols = map[0].length;
@@ -33,37 +38,56 @@ class World {
 
   public function draw() {
     for (row in 0...rows) {
+      tileGrid[row] = [];
       for (col in 0...cols) {
         // creating a sprite for each tile is definitely not the right way
-        drawCell(map[row][col], row, col);
+        getCell(map[row][col], row, col);
       }
     }
+    tiles = new Tilemap({
+      // location coords
+      x: 0,
+      y: 0,
+      // width/height of map in tiles
+      w: cols,
+      h: rows,
+      // size of the actual tiles in px
+      tile_width: 128,
+      tile_height: 128,
+      // and finally, map orientation
+      orientation: TilemapOrientation.ortho
+    });
+
+    tiles.add_tileset({
+      name: 'tiles',
+      texture: Luxe.loadTexture('assets/tiles.png'),
+      tile_width: 128,
+      tile_height: 128
+    });
+
+    tiles.add_layer({
+      name: 'fg',
+      layer: 1,
+      opacity: 1,
+      visible: true
+    });
+
+    tiles.add_tiles_from_grid('fg', tileGrid);
+
+    tiles.display({
+      scale: 1,
+      batcher: null, // what is this? is `null` a problem?
+      depth: 1
+    });
   }
 
-  function drawCell(cell : MazeCell, row : Int, col : Int) switch cell {
+  function getCell(cell : MazeCell, row : Int, col : Int) switch cell {
     case open:
-      // new Sprite({
-      //   centered: false,
-      //   pos: new Vector(col * tileSize, row * tileSize),
-      //   color: new Color(0, 0, 0, 0),
-      //   size: new Vector(tileSize, tileSize)
-      // });
+      tileGrid[row][col] = 2;
     case wall:
-      new Sprite({
-        centered: false,
-        pos: new Vector(col * tileSize, row * tileSize),
-        color: new Color(255, 255, 255, 0.9),
-        size: new Vector(tileSize, tileSize),
-        depth: 1
-      });
+      tileGrid[row][col] = 1;
     case powerUp(value):
-      // do something more interesting
-      // new Sprite({
-      //   centered: false,
-      //   pos: new Vector(col * tileSize, row * tileSize),
-      //   color: new Color().rgb(0xffffff),
-      //   size: new Vector(tileSize, tileSize)
-      // });
+      tileGrid[row][col] = 2;
   }
 
   public function getValueAtTile(x : Float, y : Float) : MazeCell {

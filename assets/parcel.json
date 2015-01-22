@@ -1,5 +1,6 @@
 {
   "textures" : [
-    { "id" : "assets/background.png" }
+    { "id" : "assets/background.png" },
+    { "id" : "assets/tiles.png" }
   ]
 }
