@@ -83,11 +83,11 @@ class World {
 
   function getCell(cell : MazeCell, row : Int, col : Int) switch cell {
     case open:
-      tileGrid[row][col] = 2;
+      tileGrid[row][col] = 0;
     case wall:
       tileGrid[row][col] = 1;
     case powerUp(value):
-      tileGrid[row][col] = 2;
+      tileGrid[row][col] = 0;
   }
 
   public function getValueAtTile(x : Float, y : Float) : MazeCell {
