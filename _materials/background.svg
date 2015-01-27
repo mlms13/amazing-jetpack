@@ -15,7 +15,7 @@
    id="svg3788"
    version="1.1"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="New document 5">
+   sodipodi:docname="background.svg">
   <defs
      id="defs3790">
     <linearGradient
@@ -705,9 +705,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.45254834"
-     inkscape:cx="773.69284"
-     inkscape:cy="546.22425"
+     inkscape:zoom="0.16"
+     inkscape:cx="1559.7898"
+     inkscape:cy="1839.442"
      inkscape:current-layer="layer1"
      inkscape:document-units="px"
      showgrid="false"
@@ -733,7 +733,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -930,5 +930,12 @@
        d="m 1081.8597,512.6667 4.7646,76.90127 44.7304,-74.15286 z"
        id="path6269"
        inkscape:connector-curvature="0" />
+    <rect
+       style="opacity:0.82304527000000005;fill:#605578;fill-opacity:0.35159817;fill-rule:nonzero;stroke:#f1f9ff;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect3145"
+       width="1612.2035"
+       height="1211.5096"
+       x="-2.3570225"
+       y="-2.0815284" />
   </g>
 </svg>
