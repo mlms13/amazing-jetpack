@@ -15,7 +15,10 @@
    id="svg3788"
    version="1.1"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="background.svg">
+   sodipodi:docname="background.svg"
+   inkscape:export-filename="/home/michael/Projects/Games/amazing-jetpack/assets/background.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
   <defs
      id="defs3790">
     <linearGradient
@@ -733,7 +736,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
