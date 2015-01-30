@@ -23,6 +23,8 @@ class MacroMaze {
         return "[" + line.map(function(char) return switch char {
           case ".": "MazeCell.open";
           case "x": "MazeCell.wall";
+          case "s": "MazeCell.start";
+          case "e": "MazeCell.end";
           case "1","2","3","4","5","6": 'MazeCell.powerUp($char)';
           case c: throw 'damnit I knew you would use the invalid char "$c"';
         }).join(", ") + "]";

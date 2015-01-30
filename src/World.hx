@@ -11,13 +11,13 @@ class World {
   public var rows : Int;
   public var cols : Int;
   public var tileSize : Int;
+  public var startPos : Vector;
+  public var endPos : Vector;
 
   var tileGrid : Array<Array<Int>>;
   var tiles : Tilemap;
 
-  public function new(?mapPath : String, ?tileSize = 32) {
-    // eventually a map path won't be optional, and we'll read
-    // a json file here to create the map. for now...
+  public function new(mapPath : String, ?tileSize = 32) {
     this.map = MacroMaze.load("src/maps/1.worldmap");
     tileGrid = [];
     this.tileSize = tileSize;
@@ -84,6 +84,13 @@ class World {
   function getCell(cell : MazeCell, row : Int, col : Int) switch cell {
     case open:
       tileGrid[row][col] = 0;
+    case start:
+      tileGrid[row][col] = 0;
+      trace('Setting start position to ' + col + ' ' + row);
+      startPos = new Vector(col, row);
+    case end:
+      tileGrid[row][col] = 0;
+      endPos = new Vector(col, row);
     case wall:
       tileGrid[row][col] = 1;
     case powerUp(value):
