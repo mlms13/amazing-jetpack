@@ -86,7 +86,6 @@ class World {
       tileGrid[row][col] = 0;
     case start:
       tileGrid[row][col] = 0;
-      trace('Setting start position to ' + col + ' ' + row);
       startPos = new Vector(col, row);
     case end:
       tileGrid[row][col] = 0;
