@@ -6,6 +6,7 @@ import luxe.Parcel;
 import luxe.ParcelProgress;
 
 class Main extends luxe.Game {
+  var overlay : Sprite;
   var level : Level;
   var player : Player;
   var acceleration : Float;
@@ -35,6 +36,14 @@ class Main extends luxe.Game {
   }
 
   function onAssetsLoaded(_) {
+    overlay = new Sprite({
+      name: 'overlay',
+      centered: false,
+      size: Luxe.screen.size,
+      color: new Color(1, 1, 1, 0),
+      depth: 4
+    });
+
     level = new Level("src/maps/1.worldmap", tileSize);
     player = new Player(level.world.startPos, playerSize, level.world);
     connectInput();
@@ -82,6 +91,9 @@ class Main extends luxe.Game {
     player.move();
     positionCamera();
     positionBackground();
+
+    // TODO: figure out if player is in the "end" tile
+    // if (player.)
   }
 
   function positionCamera() {
