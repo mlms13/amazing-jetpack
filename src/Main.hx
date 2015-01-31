@@ -64,7 +64,7 @@ class Main extends luxe.Game {
   }
 
   override function update(delta : Float) {
-    if (player == null) {
+    if (player == null || level == null || !level.isActive) {
         return;
     }
     // start by attempting to apply gravity
@@ -94,6 +94,7 @@ class Main extends luxe.Game {
 
     // figure out if player is in the "end" tile
     if (player.isCollidingWith(level.world.endPos, tileSize, tileSize)) {
+      level.isActive = false;
       trace("YOU WIN");
     }
   }
