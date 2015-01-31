@@ -19,6 +19,12 @@ class Player {
     jumpSpeed = 4 * currentWorld.tileSize;
     this.size = size;
 
+    // scale the start position for map pixels instead of mapp coordinates, and
+    // adjust for the fact that the player should start on the ground
+    startPos.x *= currentWorld.tileSize;
+    startPos.y *= currentWorld.tileSize;
+    startPos.y += currentWorld.tileSize - this.size;
+
     rendering = new Sprite({
       centered: false,
       name: 'The Player',

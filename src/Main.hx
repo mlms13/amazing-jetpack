@@ -6,7 +6,8 @@ import luxe.Parcel;
 import luxe.ParcelProgress;
 
 class Main extends luxe.Game {
-  public var world : World;
+  var overlay : Sprite;
+  var level : Level;
   var player : Player;
   var acceleration : Float;
   var tileSize = 128;
@@ -35,9 +36,16 @@ class Main extends luxe.Game {
   }
 
   function onAssetsLoaded(_) {
-    world = new World(tileSize);
-    player = new Player(new Vector(0, 18 * tileSize + (tileSize - playerSize)), playerSize, world);
-    world.draw();
+    overlay = new Sprite({
+      name: 'overlay',
+      centered: false,
+      size: Luxe.screen.size,
+      color: new Color(1, 1, 1, 0),
+      depth: 4
+    });
+
+    level = new Level("src/maps/1.worldmap", tileSize);
+    player = new Player(level.world.startPos, playerSize, level.world);
     connectInput();
   }
 
@@ -83,6 +91,9 @@ class Main extends luxe.Game {
     player.move();
     positionCamera();
     positionBackground();
+
+    // TODO: figure out if player is in the "end" tile
+    // if (player.)
   }
 
   function positionCamera() {
@@ -90,9 +101,9 @@ class Main extends luxe.Game {
     var cameraX = player.rendering.pos.x + (playerSize / 2) - (Luxe.screen.w / 2),
         cameraY = player.rendering.pos.y + (playerSize / 2) - (Luxe.screen.h / 2),
         leftEdge = 0,
-        rightEdge = world.cols * world.tileSize,
+        rightEdge = level.world.cols * level.world.tileSize,
         topEdge = 0,
-        bottomEdge = world.rows * world.tileSize;
+        bottomEdge = level.world.rows * level.world.tileSize;
 
     // Camera must be bound to the four edges
     cameraX = Math.max(cameraX, leftEdge);
@@ -108,14 +119,14 @@ class Main extends luxe.Game {
 
   function positionBackground() {
     // track how far the camera has moved as a percent of how far it could move
-    var mapPxWidth = world.cols * tileSize,
-        mapPxHeight = world.rows * tileSize,
+    var mapPxWidth = level.world.cols * tileSize,
+        mapPxHeight = level.world.rows * tileSize,
         cameraRangeX = mapPxWidth - Luxe.screen.w,
         cameraRangeY = mapPxHeight - Luxe.screen.h,
-        bgRangeX = mapPxWidth - world.background.size.x,
-        bgRangeY = mapPxHeight - world.background.size.y;
+        bgRangeX = mapPxWidth - level.world.background.size.x,
+        bgRangeY = mapPxHeight - level.world.background.size.y;
 
-    world.background.pos.x = (Luxe.camera.pos.x / cameraRangeX) * bgRangeX;
-    world.background.pos.y = (Luxe.camera.pos.y / cameraRangeY) * bgRangeY;
+    level.world.background.pos.x = (Luxe.camera.pos.x / cameraRangeX) * bgRangeX;
+    level.world.background.pos.y = (Luxe.camera.pos.y / cameraRangeY) * bgRangeY;
   }
 }
