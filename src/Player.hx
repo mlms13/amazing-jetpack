@@ -19,20 +19,23 @@ class Player {
     jumpSpeed = 4 * currentWorld.tileSize;
     this.size = size;
 
-    // scale the start position for map pixels instead of mapp coordinates, and
-    // adjust for the fact that the player should start on the ground
-    startPos.x *= currentWorld.tileSize;
-    startPos.y *= currentWorld.tileSize;
-    startPos.y += currentWorld.tileSize - this.size;
-
     rendering = new Sprite({
       centered: false,
       name: 'The Player',
-      pos: startPos,
+      pos: new Vector(startPos.x, startPos.y + currentWorld.tileSize - this.size),
       color: new Color().rgb(0xbada55),
       size: new Vector(size, size),
       depth: 2
     });
+  }
+
+  public function isCollidingWith(pos : Vector, h : Float, w : Float) {
+    var xCollision = (rendering.pos.x > pos.x && rendering.pos.x < pos.x + w) ||
+                     (rendering.pos.x + size > pos.x && rendering.pos.x + size < pos.x + w),
+        yCollision = (rendering.pos.y > pos.y && rendering.pos.y < pos.y + h) ||
+                     (rendering.pos.y + size > pos.y && rendering.pos.y + size < pos.y + h);
+
+    return xCollision && yCollision;
   }
 
   public function move() {

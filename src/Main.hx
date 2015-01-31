@@ -92,8 +92,10 @@ class Main extends luxe.Game {
     positionCamera();
     positionBackground();
 
-    // TODO: figure out if player is in the "end" tile
-    // if (player.)
+    // figure out if player is in the "end" tile
+    if (player.isCollidingWith(level.world.endPos, tileSize, tileSize)) {
+      trace("YOU WIN");
+    }
   }
 
   function positionCamera() {

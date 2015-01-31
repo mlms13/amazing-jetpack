@@ -86,10 +86,10 @@ class World {
       tileGrid[row][col] = 0;
     case start:
       tileGrid[row][col] = 0;
-      startPos = new Vector(col, row);
+      startPos = new Vector(col * tileSize, row * tileSize);
     case end:
       tileGrid[row][col] = 0;
-      endPos = new Vector(col, row);
+      endPos = new Vector(col * tileSize, row * tileSize);
     case wall:
       tileGrid[row][col] = 1;
     case powerUp(value):
