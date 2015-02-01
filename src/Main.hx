@@ -6,8 +6,8 @@ import luxe.Parcel;
 import luxe.ParcelProgress;
 
 class Main extends luxe.Game {
-  var overlay : Sprite;
   var level : Level;
+  var overlay : VisualOverlay;
   var player : Player;
   var acceleration : Float;
   var tileSize = 128;
@@ -36,14 +36,7 @@ class Main extends luxe.Game {
   }
 
   function onAssetsLoaded(_) {
-    overlay = new Sprite({
-      name: 'overlay',
-      centered: false,
-      size: Luxe.screen.size,
-      color: new Color(1, 1, 1, 0),
-      depth: 4
-    });
-
+    overlay = new VisualOverlay();
     level = new Level("src/maps/1.worldmap", tileSize);
     player = new Player(level.world.startPos, playerSize, level.world);
     connectInput();
@@ -95,7 +88,8 @@ class Main extends luxe.Game {
     // figure out if player is in the "end" tile
     if (player.isCollidingWith(level.world.endPos, tileSize, tileSize)) {
       level.isActive = false;
-      trace("YOU WIN");
+      overlay.setMessage('You Win');
+      overlay.show();
     }
   }
 
