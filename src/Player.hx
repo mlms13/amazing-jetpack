@@ -22,8 +22,8 @@ class Player {
     rendering = new Sprite({
       centered: false,
       name: 'The Player',
+      texture: Luxe.loadTexture('assets/penguin.png'),
       pos: new Vector(startPos.x, startPos.y + currentWorld.tileSize - this.size),
-      color: new Color().rgb(0xbada55),
       size: new Vector(size, size),
       depth: 2
     });

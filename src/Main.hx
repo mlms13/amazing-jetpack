@@ -11,7 +11,7 @@ class Main extends luxe.Game {
   var player : Player;
   var acceleration : Float;
   var tileSize = 128;
-  var playerSize = 48;
+  var playerSize = 64;
 
   override function config(config:luxe.AppConfig) {
     config.window.width = 800;
@@ -77,9 +77,11 @@ class Main extends luxe.Game {
 
     if (Luxe.input.inputdown('left')) {
       player.velocity.x = -player.maxSpeed * delta;
+      player.rendering.flipx = true;
     }
     if (Luxe.input.inputdown('right')) {
       player.velocity.x = player.maxSpeed * delta;
+      player.rendering.flipx = false;
     }
     player.move();
     positionCamera();
