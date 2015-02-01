@@ -18,11 +18,12 @@ class VisualOverlay {
     // TODO: load font resource
     // TODO: figure out an appropriate text size
     text = new Text({
-      point_size: 48,
+      point_size: 64,
       depth: 4.1,
       align: TextAlign.center,
       text: 'Default Message',
-      color: new Color(0, 0, 0, 0).rgb(0x00aadd)
+      font: Luxe.resources.find_font('norwester'),
+      color: new Color(0, 0, 0, 0).rgb(0xffffff)
     });
   }
 
@@ -33,7 +34,8 @@ class VisualOverlay {
   public function show() {
     background.pos = Luxe.camera.pos;
     text.pos = Luxe.camera.center;
-    background.color.tween(.5, {a: 0.9});
+    text.pos.y -= Luxe.screen.h / 4;
+    background.color.tween(.5, {a: 0.7});
     Luxe.timer.schedule(.5, function () {
       text.color.tween(.5, {a: 1});
     });

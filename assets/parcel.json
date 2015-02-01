@@ -2,5 +2,8 @@
   "textures" : [
     { "id" : "assets/background.png" },
     { "id" : "assets/tiles.png" }
+  ],
+  "fonts" : [
+    { "id" : "norwester.fnt", "path" : "assets/norwester/" }
   ]
 }

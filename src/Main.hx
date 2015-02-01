@@ -88,7 +88,7 @@ class Main extends luxe.Game {
     // figure out if player is in the "end" tile
     if (player.isCollidingWith(level.world.endPos, tileSize, tileSize)) {
       level.isActive = false;
-      overlay.setMessage('You Win');
+      overlay.setMessage('you win!');
       overlay.show();
     }
   }
