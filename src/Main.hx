@@ -11,7 +11,7 @@ class Main extends luxe.Game {
   var player : Player;
   var acceleration : Float;
   var tileSize = 128;
-  var playerSize = 64;
+  var playerSize = new Vector(43, 64);
 
   override function config(config:luxe.AppConfig) {
     config.window.width = 800;
@@ -97,8 +97,8 @@ class Main extends luxe.Game {
 
   function positionCamera() {
     // handle camera position, by default x and y are centered on the player
-    var cameraX = player.rendering.pos.x + (playerSize / 2) - (Luxe.screen.w / 2),
-        cameraY = player.rendering.pos.y + (playerSize / 2) - (Luxe.screen.h / 2),
+    var cameraX = player.rendering.pos.x + (playerSize.x / 2) - (Luxe.screen.w / 2),
+        cameraY = player.rendering.pos.y + (playerSize.y / 2) - (Luxe.screen.h / 2),
         leftEdge = 0,
         rightEdge = level.world.cols * level.world.tileSize,
         topEdge = 0,

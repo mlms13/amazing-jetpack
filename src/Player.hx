@@ -9,9 +9,9 @@ class Player {
   public var velocity : Vector;
   public var maxSpeed : Float;
   public var jumpSpeed : Float;
-  public var size : Int;
+  public var size : Vector;
 
-  public function new(startPos : Vector, ?size = 24, world : World) {
+  public function new(startPos : Vector, size : Vector, world : World) {
     isOnGround = true;
     currentWorld = world;
     velocity = new Vector(0, 0);
@@ -23,17 +23,17 @@ class Player {
       centered: false,
       name: 'The Player',
       texture: Luxe.loadTexture('assets/penguin.png'),
-      pos: new Vector(startPos.x, startPos.y + currentWorld.tileSize - this.size),
-      size: new Vector(size, size),
+      pos: new Vector(startPos.x, startPos.y + currentWorld.tileSize - size.y),
+      size: size,
       depth: 2
     });
   }
 
   public function isCollidingWith(pos : Vector, h : Float, w : Float) {
     var xCollision = (rendering.pos.x > pos.x && rendering.pos.x < pos.x + w) ||
-                     (rendering.pos.x + size > pos.x && rendering.pos.x + size < pos.x + w),
+                     (rendering.pos.x + size.x > pos.x && rendering.pos.x + size.x < pos.x + w),
         yCollision = (rendering.pos.y > pos.y && rendering.pos.y < pos.y + h) ||
-                     (rendering.pos.y + size > pos.y && rendering.pos.y + size < pos.y + h);
+                     (rendering.pos.y + size.y > pos.y && rendering.pos.y + size.y < pos.y + h);
 
     return xCollision && yCollision;
   }
@@ -67,33 +67,33 @@ class Player {
 
   function avoidLeftCollision(targetX : Float) : Float {
     if (mapTileIsSolid(targetX, rendering.pos.y) ||
-        mapTileIsSolid(targetX, rendering.pos.y + (size - 1))) {
+        mapTileIsSolid(targetX, rendering.pos.y + (size.y - 1))) {
       targetX = Math.ceil(targetX / currentWorld.tileSize) * currentWorld.tileSize;
     }
     return targetX;
   }
 
   function avoidRightCollision(targetX : Float) : Float {
-    if (mapTileIsSolid(targetX + size, rendering.pos.y) ||
-        mapTileIsSolid(targetX + size, rendering.pos.y + (size - 1))) {
-      targetX = Math.floor(targetX / currentWorld.tileSize) * currentWorld.tileSize + (currentWorld.tileSize - size);
+    if (mapTileIsSolid(targetX + size.x, rendering.pos.y) ||
+        mapTileIsSolid(targetX + size.x, rendering.pos.y + (size.y - 1))) {
+      targetX = Math.floor(targetX / currentWorld.tileSize) * currentWorld.tileSize + (currentWorld.tileSize - size.x);
     }
     return targetX;
   }
 
   function avoidBottomCollision(targetY : Float) : Float {
-    if (mapTileIsSolid(rendering.pos.x, targetY + size) ||
-        mapTileIsSolid(rendering.pos.x + (size - 1), targetY + size)) {
+    if (mapTileIsSolid(rendering.pos.x, targetY + size.y) ||
+        mapTileIsSolid(rendering.pos.x + (size.x - 1), targetY + size.y)) {
       velocity.y = 0;
       isOnGround = true;
-      targetY = Math.floor(targetY / currentWorld.tileSize) * currentWorld.tileSize + (currentWorld.tileSize - size);
+      targetY = Math.floor(targetY / currentWorld.tileSize) * currentWorld.tileSize + (currentWorld.tileSize - size.y);
     }
     return targetY;
   }
 
   function avoidTopCollision(targetY : Float) : Float {
     if (mapTileIsSolid(rendering.pos.x, targetY) ||
-        mapTileIsSolid(rendering.pos.x + (size - 1), targetY)) {
+        mapTileIsSolid(rendering.pos.x + (size.x - 1), targetY)) {
       velocity.y = 0;
       targetY = Math.ceil(targetY / currentWorld.tileSize) * currentWorld.tileSize;
     }
