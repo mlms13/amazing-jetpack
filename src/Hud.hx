@@ -10,9 +10,14 @@ class Hud {
   var batcher : Batcher;
   var text : TextGeometry;
   var player : Sprite;
+  var fuel : Sprite;
   var mapWidth : Int;
   var mapHeight : Int;
   var mapScale : Float;
+  var mapPadding = 8;
+  var fuelPadding = 6;
+  var fuelWidth = 200;
+  var fuelHeight = 24;
 
   public function new() {
     batcher = Luxe.renderer.create_batcher({
@@ -20,6 +25,7 @@ class Hud {
       layer: 4
     });
 
+    // hud
     Luxe.draw.box({
       x: 0,
       y: 0,
@@ -29,6 +35,27 @@ class Hud {
       batcher: batcher
     });
 
+    // fuel progress
+    Luxe.draw.box({
+      x: (Luxe.screen.w / 2) - (fuelWidth / 2) - fuelPadding,
+      y: 30 - (fuelHeight / 2) - fuelPadding,
+      w: fuelWidth + fuelPadding * 2,
+      h: fuelHeight + fuelPadding * 2,
+      color: new Color().rgb(0xffffff),
+      batcher: batcher
+    });
+
+    // fuel bar
+    fuel = new Sprite({
+      name: 'fuel',
+      centered: false,
+      color: new Color().rgb(0x00aadd),
+      pos: new Vector((Luxe.screen.w / 2) - (fuelWidth / 2), 30 - (fuelHeight / 2)),
+      size: new Vector(fuelWidth, fuelHeight),
+      batcher: batcher
+    });
+
+    // timer
     text = Luxe.draw.text({
       text: '0:00',
       point_size: 40,
@@ -45,10 +72,8 @@ class Hud {
   }
 
   public function drawMap(world : World) {
-    var padding = 8;
-
-    mapWidth = 5 * world.cols + (padding * 2);
-    mapHeight = 5 * world.rows + (padding * 2);
+    mapWidth = 5 * world.cols + (mapPadding * 2);
+    mapHeight = 5 * world.rows + (mapPadding * 2);
     mapScale = 5 / world.tileSize;
 
     player = new Sprite({
@@ -73,8 +98,8 @@ class Hud {
       for (col in 0...world.cols) {
         if (world.map[row][col] == MazeCell.wall) {
           Luxe.draw.box({
-            x : Luxe.screen.w - mapWidth + (col * 5) + padding,
-            y : (row * 5) + padding,
+            x : Luxe.screen.w - mapWidth + (col * 5) + mapPadding,
+            y : (row * 5) + mapPadding,
             w: 5,
             h: 5,
             color: new Color(0,0,0,75).rgb(0xffffff),
@@ -86,8 +111,12 @@ class Hud {
   }
 
   public function positionPlayerInMap(pos : Vector) {
-    var padding = 8;
-    player.pos.x = Luxe.screen.w - mapWidth + padding + pos.x * mapScale;
-    player.pos.y = padding + pos.y * mapScale;
+    player.pos.x = Luxe.screen.w - mapWidth + mapPadding + pos.x * mapScale;
+    player.pos.y = mapPadding + pos.y * mapScale;
+  }
+
+  public function updateFuelMeter(currentFuel : Float, maxFuel : Float) {
+    trace('fuel meter should be ' + (currentFuel / maxFuel) * fuelWidth);
+    fuel.size.x = (currentFuel / maxFuel) * fuelWidth;
   }
 }

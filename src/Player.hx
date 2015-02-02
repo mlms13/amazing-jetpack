@@ -12,6 +12,10 @@ class Player {
   public var jumpSpeed : Float;
   public var size : Vector;
   public var anim : SpriteAnimation;
+  public var maxFuel = 100.0;
+  public var currentFuel = 100.0;
+  public var fuelBurnRate = 25.0; // fuel usage per second
+  public var fuelChargeRate = 8.0;
 
   public function new(startPos : Vector, size : Vector, world : World) {
     isOnGround = true;

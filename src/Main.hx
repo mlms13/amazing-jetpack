@@ -79,14 +79,18 @@ class Main extends luxe.Game {
     }
 
     // and even if they aren't on the ground, they can always use the jetpack
-    // TODO: ...if it has fuel
-    if (Luxe.input.inputdown('up')) {
+    // ...if it has fuel
+    if (Luxe.input.inputdown('up') && player.currentFuel > 0) {
+      player.currentFuel = Math.max(0, player.currentFuel - player.fuelBurnRate * delta);
       player.velocity.y -= (player.maxSpeed / 4) * delta;
       player.velocity.y = Math.max(player.velocity.y, -6);
       moving = true;
       if (player.anim.animation != 'jetpack') {
         player.anim.animation = 'jetpack';
       }
+    } else {
+      // fuel recharges because of magic
+      player.currentFuel = Math.min(player.maxFuel, player.currentFuel + player.fuelChargeRate * delta);
     }
 
     if (Luxe.input.inputdown('left')) {
@@ -123,6 +127,7 @@ class Main extends luxe.Game {
     level.time += delta;
     hud.setTime(level.time);
     hud.positionPlayerInMap(player.rendering.pos);
+    hud.updateFuelMeter(player.currentFuel, player.maxFuel);
 
     // figure out if player is in the "end" tile
     if (player.isCollidingWith(level.world.endPos, tileSize, tileSize)) {
