@@ -59,6 +59,7 @@ class Hud {
     text = Luxe.draw.text({
       text: '0:00',
       point_size: 40,
+      bounds: new Rectangle(mapPadding, 0, 200, 60),
       color : new Color().rgb(0xffffff),
       batcher: batcher
     });
