@@ -61,7 +61,7 @@ class Main extends luxe.Game {
     if (player == null || level == null || !level.isActive) {
         return;
     }
-    var moving = false;
+    var moving = !player.isOnGround;
 
     // start by attempting to apply gravity
     player.velocity.y = Math.min(player.velocity.y + 0.25, 12);
@@ -69,8 +69,10 @@ class Main extends luxe.Game {
     // however, if the player is on the ground, allow them to jump
     if (Luxe.input.inputdown('jump') && player.isOnGround) {
       player.velocity.y = -player.jumpSpeed * delta;
-      player.anim.animation = 'jump';
       moving = true;
+      if (player.anim.animation != 'jump') {
+        player.anim.animation = 'jump';
+      }
     }
 
     // and even if they aren't on the ground, they can always use the jetpack
@@ -103,7 +105,7 @@ class Main extends luxe.Game {
       }
     }
 
-    if (!moving) {
+    if (!moving || (!player.isOnGround && player.anim.animation == 'walk')) {
       player.anim.animation = 'idle';
     }
 
