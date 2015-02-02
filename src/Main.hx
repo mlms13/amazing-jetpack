@@ -42,7 +42,7 @@ class Main extends luxe.Game {
     level = new Level("src/maps/1.worldmap", tileSize);
     player = new Player(level.world.startPos, playerSize, level.world);
     player.createAnimation();
-    hud.drawMap(level.world.map);
+    hud.drawMap(level.world);
     connectInput();
   }
 
@@ -122,6 +122,7 @@ class Main extends luxe.Game {
     }
     level.time += delta;
     hud.setTime(level.time);
+    hud.positionPlayerInMap(player.rendering.pos);
 
     // figure out if player is in the "end" tile
     if (player.isCollidingWith(level.world.endPos, tileSize, tileSize)) {
