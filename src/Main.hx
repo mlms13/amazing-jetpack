@@ -89,6 +89,8 @@ class Main extends luxe.Game {
         if (player.anim.animation != 'jetpack') {
           player.anim.animation = 'jetpack';
         }
+      } else if (player.anim.animation != 'fuelless') {
+        player.anim.animation = 'fuelless';
       }
     } else {
       // fuel recharges because of magic
@@ -116,7 +118,7 @@ class Main extends luxe.Game {
       }
     }
 
-    if (!moving && (player.isOnGround || player.anim.animation != 'jump')) {
+    if (!moving && (player.isOnGround || (player.anim.animation != 'jump' && player.anim.animation != 'fuelless'))) {
       player.anim.animation = 'idle';
     }
 
