@@ -15,8 +15,7 @@ class VisualOverlay {
       depth: 4
     });
 
-    // TODO: load font resource
-    // TODO: figure out an appropriate text size
+    // load font resource
     text = new Text({
       point_size: 64,
       depth: 4.1,

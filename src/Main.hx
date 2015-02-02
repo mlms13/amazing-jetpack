@@ -8,6 +8,7 @@ import luxe.ParcelProgress;
 class Main extends luxe.Game {
   var level : Level;
   var overlay : VisualOverlay;
+  var hud : Hud;
   var player : Player;
   var acceleration : Float;
   var tileSize = 128;
@@ -36,6 +37,7 @@ class Main extends luxe.Game {
   }
 
   function onAssetsLoaded(_) {
+    hud = new Hud();
     overlay = new VisualOverlay();
     level = new Level("src/maps/1.worldmap", tileSize);
     player = new Player(level.world.startPos, playerSize, level.world);
@@ -111,9 +113,14 @@ class Main extends luxe.Game {
       player.anim.animation = 'idle';
     }
 
-    player.move();
-    positionCamera();
-    positionBackground();
+
+    if (player.velocity.x != 0 || player.velocity.y != 0) {
+      positionCamera();
+      positionBackground();
+      player.move();
+    }
+    level.time += delta;
+    hud.setTime(level.time);
 
     // figure out if player is in the "end" tile
     if (player.isCollidingWith(level.world.endPos, tileSize, tileSize)) {
