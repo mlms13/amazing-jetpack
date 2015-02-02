@@ -116,7 +116,6 @@ class Hud {
   }
 
   public function updateFuelMeter(currentFuel : Float, maxFuel : Float) {
-    trace('fuel meter should be ' + (currentFuel / maxFuel) * fuelWidth);
     fuel.size.x = (currentFuel / maxFuel) * fuelWidth;
   }
 }
