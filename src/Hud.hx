@@ -42,15 +42,16 @@ class Hud {
   public function drawMap(map : Array<Array<MazeCell>>) {
     var rows = map.length,
         cols = map[0].length,
-        width = 5 * cols,
-        height = 5 * rows;
+        padding = 8,
+        width = 5 * cols + (padding * 2),
+        height = 5 * rows + (padding * 2);
 
     Luxe.draw.box({
       x: Luxe.screen.w - width,
-      y: 0,
+      y: 60,
       w: width,
-      h: height,
-      color: new Color(0,0,0,0.8).rgb(0xffffff),
+      h: height - 60,
+      color: new Color(1, 1, 1, 0.8).rgb(0x665588),
       batcher: batcher
     });
 
@@ -58,11 +59,11 @@ class Hud {
       for (col in 0...cols) {
         if (map[row][col] == MazeCell.wall) {
           Luxe.draw.box({
-            x : Luxe.screen.w - width + col * 5,
-            y : row * 5,
+            x : Luxe.screen.w - width + (col * 5) + padding,
+            y : (row * 5) + padding,
             w: 5,
             h: 5,
-            color: new Color(0,0,0,1),
+            color: new Color(0,0,0,75).rgb(0xffffff),
             batcher: batcher
           });
         }
