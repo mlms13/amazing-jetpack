@@ -38,4 +38,35 @@ class Hud {
     var secondsPrefix = seconds < 10 ? "0" : "";
     text.text = Std.string(minutes) + ":" + secondsPrefix + Std.string(seconds);
   }
+
+  public function drawMap(map : Array<Array<MazeCell>>) {
+    var rows = map.length,
+        cols = map[0].length,
+        width = 5 * cols,
+        height = 5 * rows;
+
+    Luxe.draw.box({
+      x: Luxe.screen.w - width,
+      y: 0,
+      w: width,
+      h: height,
+      color: new Color(0,0,0,0.8).rgb(0xffffff),
+      batcher: batcher
+    });
+
+    for (row in 0...rows) {
+      for (col in 0...cols) {
+        if (map[row][col] == MazeCell.wall) {
+          Luxe.draw.box({
+            x : Luxe.screen.w - width + col * 5,
+            y : row * 5,
+            w: 5,
+            h: 5,
+            color: new Color(0,0,0,1),
+            batcher: batcher
+          });
+        }
+      }
+    }
+  }
 }

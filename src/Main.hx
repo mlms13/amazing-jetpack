@@ -42,6 +42,7 @@ class Main extends luxe.Game {
     level = new Level("src/maps/1.worldmap", tileSize);
     player = new Player(level.world.startPos, playerSize, level.world);
     player.createAnimation();
+    hud.drawMap(level.world.map);
     connectInput();
   }
 
