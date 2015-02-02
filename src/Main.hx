@@ -61,7 +61,7 @@ class Main extends luxe.Game {
     if (player == null || level == null || !level.isActive) {
         return;
     }
-    var moving = !player.isOnGround;
+    var moving = false;
 
     // start by attempting to apply gravity
     player.velocity.y = Math.min(player.velocity.y + 0.25, 12);
@@ -80,8 +80,10 @@ class Main extends luxe.Game {
     if (Luxe.input.inputdown('up')) {
       player.velocity.y -= (player.maxSpeed / 4) * delta;
       player.velocity.y = Math.max(player.velocity.y, -6);
-      player.anim.animation = 'jetpack';
       moving = true;
+      if (player.anim.animation != 'jetpack') {
+        player.anim.animation = 'jetpack';
+      }
     }
 
     if (Luxe.input.inputdown('left')) {
@@ -105,7 +107,7 @@ class Main extends luxe.Game {
       }
     }
 
-    if (!moving || (!player.isOnGround && player.anim.animation == 'walk')) {
+    if (!moving && (player.isOnGround || player.anim.animation != 'jump')) {
       player.anim.animation = 'idle';
     }
 
