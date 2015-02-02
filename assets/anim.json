@@ -1,0 +1,26 @@
+{
+  "idle": {
+    "frame_size": { "x": "43", "y": "64" },
+    "frameset": ["1"],
+    "loop": "true",
+    "speed": "1"
+  },
+  "jump": {
+    "frame_size": { "x": "43", "y": "64" },
+    "frameset": ["1"],
+    "loop": "true",
+    "speed": "1"
+  },
+  "jetpack": {
+    "frame_size": { "x": "43", "y": "64" },
+    "frameset": ["1"],
+    "loop": "true",
+    "speed": "9"
+  },
+  "walk": {
+    "frame_size": { "x": "43", "y": "64" },
+    "frameset": ["1-4", "4-1"],
+    "loop": "true",
+    "speed": "20"
+  }
+}

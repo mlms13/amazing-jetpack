@@ -1,6 +1,7 @@
 import luxe.Sprite;
 import luxe.Color;
 import luxe.Vector;
+import luxe.components.sprite.SpriteAnimation;
 
 class Player {
   public var rendering : Sprite;
@@ -10,23 +11,35 @@ class Player {
   public var maxSpeed : Float;
   public var jumpSpeed : Float;
   public var size : Vector;
+  public var anim : SpriteAnimation;
 
   public function new(startPos : Vector, size : Vector, world : World) {
     isOnGround = true;
     currentWorld = world;
     velocity = new Vector(0, 0);
-    maxSpeed = 2 * currentWorld.tileSize;
+    maxSpeed = currentWorld.tileSize;
     jumpSpeed = 4 * currentWorld.tileSize;
     this.size = size;
 
     rendering = new Sprite({
       centered: false,
       name: 'The Player',
-      texture: Luxe.loadTexture('assets/penguin.png'),
+      texture: Luxe.loadTexture('assets/penguin_animation.png'),
       pos: new Vector(startPos.x, startPos.y + currentWorld.tileSize - size.y),
       size: size,
       depth: 2
     });
+  }
+
+  public function createAnimation() {
+    var animObject = Luxe.loadJSON('assets/anim.json');
+
+    anim = rendering.add(new SpriteAnimation({name: 'anim'}));
+    anim.add_from_json_object(animObject.json);
+
+    // start the animation
+    anim.animation = 'idle';
+    anim.play();
   }
 
   public function isCollidingWith(pos : Vector, h : Float, w : Float) {

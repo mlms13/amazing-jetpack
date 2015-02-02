@@ -39,6 +39,7 @@ class Main extends luxe.Game {
     overlay = new VisualOverlay();
     level = new Level("src/maps/1.worldmap", tileSize);
     player = new Player(level.world.startPos, playerSize, level.world);
+    player.createAnimation();
     connectInput();
   }
 
@@ -60,12 +61,16 @@ class Main extends luxe.Game {
     if (player == null || level == null || !level.isActive) {
         return;
     }
+    var moving = false;
+
     // start by attempting to apply gravity
     player.velocity.y = Math.min(player.velocity.y + 0.25, 12);
 
     // however, if the player is on the ground, allow them to jump
     if (Luxe.input.inputdown('jump') && player.isOnGround) {
       player.velocity.y = -player.jumpSpeed * delta;
+      player.anim.animation = 'jump';
+      moving = true;
     }
 
     // and even if they aren't on the ground, they can always use the jetpack
@@ -73,16 +78,35 @@ class Main extends luxe.Game {
     if (Luxe.input.inputdown('up')) {
       player.velocity.y -= (player.maxSpeed / 4) * delta;
       player.velocity.y = Math.max(player.velocity.y, -6);
+      player.anim.animation = 'jetpack';
+      moving = true;
     }
 
     if (Luxe.input.inputdown('left')) {
       player.velocity.x = -player.maxSpeed * delta;
       player.rendering.flipx = true;
+      if (player.isOnGround) {
+        moving = true;
+        if (player.anim.animation != 'walk') {
+          player.anim.animation = 'walk';
+        }
+      }
     }
     if (Luxe.input.inputdown('right')) {
       player.velocity.x = player.maxSpeed * delta;
       player.rendering.flipx = false;
+      if (player.isOnGround) {
+        moving = true;
+        if (player.anim.animation != 'walk') {
+          player.anim.animation = 'walk';
+        }
+      }
     }
+
+    if (!moving) {
+      player.anim.animation = 'idle';
+    }
+
     player.move();
     positionCamera();
     positionBackground();
