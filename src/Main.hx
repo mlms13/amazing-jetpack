@@ -17,23 +17,24 @@ class Main extends luxe.Game {
   override function config(config:luxe.AppConfig) {
     config.window.width = 800;
     config.window.height = 600;
+    config.preload.jsons.push({ id : 'assets/parcel.json' });
     return config;
   }
 
   override function ready() {
     acceleration = 0.9;
 
-    var assets = Luxe.loadJSON('assets/parcel.json');
-    var preload = new Parcel();
-    preload.from_json(assets.json);
+    var assets = Luxe.resources.json('assets/parcel.json');
+    var parcel = new Parcel();
+    parcel.from_json(assets);
 
     new ParcelProgress({
-      parcel: preload,
+      parcel: parcel,
       background: new Color(1, 1, 1, 0.85),
       oncomplete: onAssetsLoaded
     });
 
-    preload.load();
+    parcel.load();
   }
 
   function onAssetsLoaded(_) {

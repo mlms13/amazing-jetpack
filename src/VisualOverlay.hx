@@ -21,7 +21,7 @@ class VisualOverlay {
       depth: 4.1,
       align: TextAlign.center,
       text: 'Default Message',
-      font: Luxe.resources.find_font('norwester'),
+      font: Luxe.resources.font('norwester'),
       color: new Color(0, 0, 0, 0).rgb(0xffffff)
     });
   }

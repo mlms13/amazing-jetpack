@@ -28,7 +28,7 @@ class Player {
     rendering = new Sprite({
       centered: false,
       name: 'The Player',
-      texture: Luxe.loadTexture('assets/penguin_animation.png'),
+      texture: Luxe.resources.texture('assets/penguin_animation.png'),
       pos: new Vector(startPos.x, startPos.y + currentWorld.tileSize - size.y),
       size: size,
       depth: 2
@@ -36,10 +36,10 @@ class Player {
   }
 
   public function createAnimation() {
-    var animObject = Luxe.loadJSON('assets/anim.json');
+    var animObject = Luxe.resources.json('assets/anim.json');
 
     anim = rendering.add(new SpriteAnimation({name: 'anim'}));
-    anim.add_from_json_object(animObject.json);
+    anim.add_from_json_object(animObject);
 
     // start the animation
     anim.animation = 'idle';

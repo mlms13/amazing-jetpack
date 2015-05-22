@@ -24,8 +24,7 @@ class World {
     this.rows = map.length;
     this.cols = map[0].length;
 
-    var bgImage = Luxe.loadTexture('assets/background.png');
-    bgImage.filter = FilterType.nearest;
+    var bgImage = Luxe.resources.texture('assets/background.png');
     var height = Luxe.screen.h;
     var width = (height / bgImage.height) * bgImage.width;
     background = new Sprite({
@@ -60,7 +59,7 @@ class World {
 
     tiles.add_tileset({
       name: 'tiles',
-      texture: Luxe.loadTexture('assets/tiles.png'),
+      texture: Luxe.resources.texture('assets/tiles.png'),
       tile_width: 128,
       tile_height: 128
     });
